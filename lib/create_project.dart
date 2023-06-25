@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 
 import 'color_calculation.dart';
 import 'next_page.dart';
 import 'sreen_constants.dart';
+import 'sql_helper.dart';
 
 class CreateProject extends StatefulWidget {
   const CreateProject({Key? key}) : super(key: key);
@@ -20,22 +19,7 @@ class _CreateProjectState extends State<CreateProject> {
   final TextEditingController _projectNameController = TextEditingController();
 
   Future<void> _saveProjectName(String projectName) async {
-    final database = openDatabase(
-      join(await getDatabasesPath(), 'projects_database.db'),
-      onCreate: (db, version) {
-        return db.execute(
-          'CREATE TABLE projects(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)',
-        );
-      },
-      version: 1,
-    );
-
-    final Database db = await database;
-    await db.insert(
-      'projects',
-      {'name': projectName},
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    await SQLHelper.instance.saveProjectName(projectName);
   }
 
   @override
@@ -57,9 +41,7 @@ class _CreateProjectState extends State<CreateProject> {
               Text(
                 "Create new Project.",
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                      fontSize: 60 / 360 * ScreenConstants.screenWidth,
-                    ),
+                style: Theme.of(context).textTheme.headline2,
               ),
               const SizedBox(
                 width: double.infinity,
@@ -72,13 +54,24 @@ class _CreateProjectState extends State<CreateProject> {
                   margin: EdgeInsets.only(
                     left: 24 / 360 * ScreenConstants.screenWidth,
                   ),
-                  child: Text(
-                    "Project Name",
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: Colors.white),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Project Name",
+                          textAlign: TextAlign.start,
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          final String projectName =
+                              _projectNameController.text.trim();
+                          _saveProjectName(projectName);
+                        },
+                        icon: Icon(Icons.create),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -113,10 +106,7 @@ class _CreateProjectState extends State<CreateProject> {
                 child: Text(
                   "Video Orientation",
                   textAlign: TextAlign.start,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: Colors.white),
+                  style: Theme.of(context).textTheme.headline3,
                 ),
               ),
               const SizedBox(
@@ -204,7 +194,7 @@ class _CreateProjectState extends State<CreateProject> {
                       onPressed: () async {
                         final String projectName =
                             _projectNameController.text.trim();
-                        await _saveProjectName(projectName);
+                        _saveProjectName(projectName);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -212,24 +202,6 @@ class _CreateProjectState extends State<CreateProject> {
                           ),
                         );
                       },
-                      // Show an error message or validation
-                      // when the project name is empty.
-                      /*showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Error'),
-                              content:
-                                  const Text('Please enter a project name.'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      },*/
                       icon: const Icon(Icons.arrow_forward),
                       label: const Text('Next'),
                     ),

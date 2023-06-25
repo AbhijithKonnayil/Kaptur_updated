@@ -1,14 +1,22 @@
-import 'package:kaptur_alpha_v1/sreen_constants.dart';
+import 'dart:io';
+
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
+import 'sreen_constants.dart';
+//_videoPlayerController =
+//      VideoPlayerController.asset('assets/videos/video.mp4');
 import 'navigation_bar.dart';
-import 'color_calculation.dart';
-import 'package:provider/provider.dart';
-import 'project_home.dart';
 
 class GenerateVideoPage extends StatefulWidget {
   final List<String> selectedImageUrls;
 
-  const GenerateVideoPage({Key? key, required this.selectedImageUrls})
+  const GenerateVideoPage(
+      {Key? key,
+      required this.selectedImageUrls,
+      required List<String> selectedImages,
+      required String videoPath,
+      required List<File> capturedImages})
       : super(key: key);
 
   @override
@@ -17,6 +25,30 @@ class GenerateVideoPage extends StatefulWidget {
 
 class _GenerateVideoPageState extends State<GenerateVideoPage> {
   int selectedFramerate = 30; // Default framerate
+  late VideoPlayerController _videoPlayerController;
+  late ChewieController _chewieController;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize video player and chewie controller
+    _videoPlayerController =
+        VideoPlayerController.asset('assets/videos/video.mp4');
+    // Replace 'video_url' with the actual URL or local path of your generated video file
+    _chewieController = ChewieController(
+      videoPlayerController: _videoPlayerController,
+      autoPlay: true,
+      looping: true,
+    );
+  }
+
+  @override
+  void dispose() {
+    // Dispose video player and chewie controller
+    _videoPlayerController.dispose();
+    _chewieController.dispose();
+    super.dispose();
+  }
 
   void onFramerateChanged(int? value) {
     if (value != null) {
@@ -24,6 +56,11 @@ class _GenerateVideoPageState extends State<GenerateVideoPage> {
         selectedFramerate = value;
       });
     }
+  }
+
+  void handleDownloadButtonPressed() {
+    // Start playing the video
+    _videoPlayerController.play();
   }
 
   @override
@@ -106,9 +143,7 @@ class _GenerateVideoPageState extends State<GenerateVideoPage> {
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Handle video generation
-                  },
+                  onPressed: handleDownloadButtonPressed,
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),

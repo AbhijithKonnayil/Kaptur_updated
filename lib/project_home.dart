@@ -4,6 +4,18 @@ import 'navigation_bar.dart';
 import 'color_calculation.dart';
 import 'package:provider/provider.dart';
 import 'generate_video_page.dart';
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'generate_video_page.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'generate_video_page.dart';
 
 class CombinedWidget extends StatefulWidget {
   const CombinedWidget({Key? key}) : super(key: key);
@@ -14,18 +26,7 @@ class CombinedWidget extends StatefulWidget {
 
 class _CombinedWidgetState extends State<CombinedWidget> {
   List<String> selectedImageUrls = [];
-  List<String> imageUrls = [
-    'https://images.unsplash.com/photo-1560807707-8cc77767d783',
-    'https://images.unsplash.com/photo-1560807707-8cc77767d783',
-    'https://images.pexels.com/photos/17152018/pexels-photo-17152018/free-photo-of-thangaraj-best-photography-photos.jpeg,'
-        'https://images.unsplash.com/photo-1560807707-8cc77767d783',
-    'https://images.unsplash.com/photo-1560807707-8cc77767d783',
-    'https://images.unsplash.com/photo-1560807707-8cc77767d783',
-    'https://images.unsplash.com/photo-1560807707-8cc77767d783',
-    'https://images.unsplash.com/photo-1560807707-8cc77767d783',
-    'https://images.unsplash.com/photo-1560807707-8cc77767d783',
-    //'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1780&q=80',
-  ];
+  List<File> capturedImages = [];
 
   void toggleImageSelection(String imageUrl) {
     setState(() {
@@ -38,27 +39,14 @@ class _CombinedWidgetState extends State<CombinedWidget> {
   }
 
   void onGenerateButtonPressed(BuildContext context) {
-    List<String> selectedImageUrls = [];
-    List<int> selectedImageIndices = [];
-
-    for (int i = 0; i < imageUrls.length; i++) {
-      if (selectedImageUrls.contains(imageUrls[i])) {
-        selectedImageIndices.add(i);
-      }
-    }
-
-    selectedImageUrls = selectedImageIndices
-        .map((index) {
-          return imageUrls[index];
-        })
-        .toList()
-        .cast<String>();
-
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => GenerateVideoPage(
           selectedImageUrls: selectedImageUrls,
+          capturedImages: capturedImages,
+          selectedImages: [],
+          videoPath: '',
         ),
       ),
     );
@@ -66,11 +54,10 @@ class _CombinedWidgetState extends State<CombinedWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
-    appState.loadColorsFromSharedPreferences();
-
     return Scaffold(
-      bottomNavigationBar: const BottomNavBar(index: 4),
+      bottomNavigationBar: const BottomNavBar(
+        index: 4,
+      ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: Container(
@@ -84,36 +71,46 @@ class _CombinedWidgetState extends State<CombinedWidget> {
               Text(
                 "My New Project.",
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                      fontSize: 60 / 360 * ScreenConstants.screenWidth,
-                    ),
+                style: GoogleFonts.gloock(
+                  fontSize: 60 / 360 * ScreenConstants.screenWidth,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Expanded(
                 child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                   ),
-                  itemCount: imageUrls.length + 1, // Add 1 for the camera icon
+                  itemCount: capturedImages.length + 1,
                   itemBuilder: (context, index) {
                     if (index == 0) {
                       return IconButton(
-                        onPressed: () {
-                          // Handle camera icon click
+                        onPressed: () async {
+                          final ImagePicker _picker = ImagePicker();
+                          final XFile? image = await _picker.pickImage(
+                            source: ImageSource.camera,
+                          );
+                          if (image != null) {
+                            setState(() {
+                              capturedImages.add(File(image.path));
+                            });
+                          }
                         },
                         icon: Icon(Icons.camera),
                       );
                     }
-                    final imageUrl = imageUrls[
-                        index - 1]; // Subtract 1 to account for the camera icon
-                    final isSelected = selectedImageUrls.contains(imageUrl);
+
+                    final imageFile = capturedImages[index - 1];
+                    final isSelected =
+                        selectedImageUrls.contains(imageFile.path);
 
                     return GestureDetector(
                       onTap: () {
-                        toggleImageSelection(imageUrl);
+                        toggleImageSelection(imageFile.path);
                       },
                       child: Stack(
                         children: [
-                          Image.network(imageUrl),
+                          Image.file(imageFile),
                           if (isSelected)
                             Positioned(
                               top: 0,
@@ -143,29 +140,13 @@ class _CombinedWidgetState extends State<CombinedWidget> {
               Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(
-                  padding: EdgeInsets.only(
-                    right: 19.0 / 360 * ScreenConstants.screenWidth,
-                  ),
-                  child: FractionallySizedBox(
-                    widthFactor: 0.3 / 360 * ScreenConstants.screenWidth,
-                    child: FilledButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          appState.accentColor,
-                        ),
-                      ),
-                      onPressed: () {
-                        onGenerateButtonPressed(context);
-                      },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Generate'),
-                          SizedBox(width: 1),
-                          Icon(Icons.play_arrow),
-                        ],
-                      ),
-                    ),
+                  padding: EdgeInsets.only(right: 16.0),
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      onGenerateButtonPressed(context);
+                    },
+                    icon: Icon(Icons.play_arrow),
+                    label: Text('Generate'),
                   ),
                 ),
               ),
