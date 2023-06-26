@@ -1,6 +1,8 @@
+import 'package:kaptur_alpha_v1/routes.dart';
 import 'package:kaptur_alpha_v1/sreen_constants.dart';
 import 'package:flutter/material.dart';
 import 'navigation_bar.dart';
+import 'CameraModule.dart';
 import 'color_calculation.dart';
 import 'package:provider/provider.dart';
 import 'generate_video_page.dart';
@@ -116,9 +118,7 @@ class _CombinedWidgetState extends State<CombinedWidget> {
                       return IconButton(
                         onPressed: () async {
                           final ImagePicker _picker = ImagePicker();
-                          final XFile? image = await _picker.pickImage(
-                            source: ImageSource.camera,
-                          );
+                          final XFile? image = await Navigator.pushNamed<XFile?>(context, camera);
                           if (image != null) {
                             setState(() {
                               capturedImages.add(File(image.path));

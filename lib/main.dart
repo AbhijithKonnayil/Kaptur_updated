@@ -9,6 +9,7 @@ import 'routes.dart';
 import 'sreen_constants.dart';
 import 'color_calculation.dart';
 import 'create_project.dart';
+import 'CameraModule.dart';
 
 main(List<String> args) {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,6 +44,7 @@ class Kaptur extends StatelessWidget {
             createProject: (context) => CreateProject(),
             yourProjects: (context) => YourProjects(),
             nextPage: (context) => NextCreate(),
+            camera: (context) => CameraModule(),
           },
         );
       }),
