@@ -16,6 +16,35 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'generate_video_page.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+Future<void> _requestPermissions() async {
+  Map<Permission, PermissionStatus> statuses = await [
+    Permission.camera,
+    Permission.microphone,
+  ].request();
+
+  if (statuses[Permission.camera] != PermissionStatus.granted || statuses[Permission.microphone] != PermissionStatus.granted) {
+    showDialog(
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Permission Required'),
+          content: Text('Camera and microphone permissions are required to use this app'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK.'),
+            )
+          ],
+        );
+      },
+      context: navigatorKey.currentContext!,
+    );
+    return;
+  }
+}
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class CombinedWidget extends StatefulWidget {
   const CombinedWidget({Key? key}) : super(key: key);
@@ -101,8 +130,7 @@ class _CombinedWidgetState extends State<CombinedWidget> {
                     }
 
                     final imageFile = capturedImages[index - 1];
-                    final isSelected =
-                        selectedImageUrls.contains(imageFile.path);
+                    final isSelected = selectedImageUrls.contains(imageFile.path);
 
                     return GestureDetector(
                       onTap: () {
