@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'color_calculation.dart';
 import 'navigation_bar.dart';
+import 'CameraModule.dart';
 //import 'create_project.dart';
 
 class YourProjects extends StatefulWidget {
@@ -67,12 +68,9 @@ class _YourProjectsState extends State<YourProjects> {
                         child: FilledButton(
                           onPressed: () {},
                           style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(appState.accentColor),
-                            overlayColor:
-                                MaterialStateProperty.all(appState.accentColor),
-                            foregroundColor: MaterialStateProperty.all(
-                                appState.labelTextColor),
+                            backgroundColor: MaterialStateProperty.all(appState.accentColor),
+                            overlayColor: MaterialStateProperty.all(appState.accentColor),
+                            foregroundColor: MaterialStateProperty.all(appState.labelTextColor),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,10 +79,7 @@ class _YourProjectsState extends State<YourProjects> {
                                 child: Center(
                                   child: Text(
                                     project.name,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelLarge!
-                                        .copyWith(
+                                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14,
                                         ),

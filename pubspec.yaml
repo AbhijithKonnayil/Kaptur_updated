@@ -53,6 +53,7 @@ dependencies:
   chewie: ^1.5.0
   google_fonts: ^5.1.0
   permission_handler: ^10.3.0
+  camera: ^0.10.5+2
 
 dev_dependencies:
   flutter_test:
@@ -102,6 +103,7 @@ flutter:
     - assets/icons/profile_cat.png
     - assets/icons/profile_cat_filled.png
     - assets/icons/pen.png
+    - assets/ShutterIcon.png
     - lib/emojiList.txt
     - packages/animated_emoji/lottie/ox.json
     - packages/animated_emoji/lottie/ant.json
