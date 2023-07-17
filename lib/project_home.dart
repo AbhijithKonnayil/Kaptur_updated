@@ -118,7 +118,14 @@ class _CombinedWidgetState extends State<CombinedWidget> {
                       return IconButton(
                         onPressed: () async {
                           final ImagePicker _picker = ImagePicker();
-                          final XFile? image = await Navigator.pushNamed<XFile?>(context, camera);
+                          XFile? image = await showDialog<XFile>(
+                              context: context,
+                              builder: (c) {
+                                return CameraModule();
+                              });
+                          print(image?.path);
+                          // final XFile? img = await _picker.pickImage(source: ImageSource.camera);
+                          // Navigator.pushNamed(context, camera);
                           if (image != null) {
                             setState(() {
                               capturedImages.add(File(image.path));
