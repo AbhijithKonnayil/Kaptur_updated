@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:kaptur_alpha_v1/next_page.dart';
+import 'package:kaptur_alpha_v1/project_home.dart';
 import 'package:kaptur_alpha_v1/your_project.dart';
 import 'package:provider/provider.dart';
-import 'profile.dart';
-import 'settings.dart';
-import 'home_page.dart';
-import 'routes.dart';
-import 'sreen_constants.dart';
+
+import 'CameraModule.dart';
 import 'color_calculation.dart';
 import 'create_project.dart';
-import 'CameraModule.dart';
+import 'home_page.dart';
+import 'profile.dart';
+import 'routes.dart';
+import 'settings.dart';
+import 'sreen_constants.dart';
 
 main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +44,7 @@ class Kaptur extends StatelessWidget {
         return MaterialApp(
           title: "Kaptur",
           theme: appState.theme,
-          home: HomeScreen(),
+          home: CombinedWidget(),
           routes: {
             home: (context) => HomeScreen(),
             settings: (context) => Settings(),
