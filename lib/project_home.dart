@@ -116,7 +116,7 @@ class _CombinedWidgetState extends State<CombinedWidget> {
                                 return Dialog(child: CameraModule());
                               });
 
-                          XFile? image = Camara Prover .image varila;
+                          XFile? image = test;
                           print(">>>> ${image?.path}");
                           // final XFile? img = await _picker.pickImage(source: ImageSource.camera);
                           // Navigator.pushNamed(context, camera);
