@@ -8,14 +8,9 @@ import 'next_page.dart';
 import 'sreen_constants.dart';
 import 'sql_helper.dart';
 
-class CreateProject extends StatefulWidget {
-  const CreateProject({Key? key}) : super(key: key);
+class CreateProject extends StatelessWidget {
+  CreateProject({Key? key}) : super(key: key);
 
-  @override
-  State<CreateProject> createState() => _CreateProjectState();
-}
-
-class _CreateProjectState extends State<CreateProject> {
   int i = 0;
   FocusNode _projectNameFocusNode = FocusNode();
   int selectedEmojiIndex = 0;
@@ -23,11 +18,11 @@ class _CreateProjectState extends State<CreateProject> {
   List<String> emojiList = [];
   final TextEditingController _projectNameController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    getEmojiList();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getEmojiList();
+  // }
 
   Future<void> _saveProjectName(String projectName) async {
     await SQLHelper.instance.saveProjectName(projectName);
@@ -64,9 +59,9 @@ class _CreateProjectState extends State<CreateProject> {
           splashColor: appState.labelColor,
           customBorder: const CircleBorder(),
           onTap: () {
-            setState(() {
-              selectedEmojiIndex = index;
-            });
+            // setState(() {
+            //   selectedEmojiIndex = index;
+            // });
           },
           child: Align(
               alignment: Alignment.center,
@@ -143,15 +138,10 @@ class _CreateProjectState extends State<CreateProject> {
                   textAlign: TextAlign.left,
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  _projectNameFocusNode.requestFocus();
-                },
-                child: TextFormField(
-                  focusNode: _projectNameFocusNode,
-                  controller: _projectNameController,
-                  // Rest of your TextFormField configuration
-                ),
+              TextFormField(
+                focusNode: _projectNameFocusNode,
+                controller: _projectNameController,
+                // Rest of your TextFormField configuration
               ),
               Container(
                 margin: EdgeInsets.only(
@@ -190,9 +180,9 @@ class _CreateProjectState extends State<CreateProject> {
                                   splashColor: appState.labelColor,
                                   customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                                   onTap: () {
-                                    setState(() {
-                                      isLandscapeSelected = true;
-                                    });
+                                    // setState(() {
+                                    //   isLandscapeSelected = true;
+                                    // });
                                   }))),
                       Container(
                         margin: EdgeInsets.only(top: 10 / 360 * ScreenConstants.screenWidth, left: 20 / 360 * ScreenConstants.screenWidth),
@@ -228,9 +218,9 @@ class _CreateProjectState extends State<CreateProject> {
                                   splashColor: appState.labelColor,
                                   customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                                   onTap: () {
-                                    setState(() {
-                                      isLandscapeSelected = false;
-                                    });
+                                    // setState(() {
+                                    //   isLandscapeSelected = false;
+                                    // });
                                   }))),
                       Container(
                         margin: EdgeInsets.only(top: 10 / 360 * ScreenConstants.screenWidth, left: 25 / 360 * ScreenConstants.screenWidth),

@@ -1,24 +1,14 @@
-import 'package:kaptur_alpha_v1/routes.dart';
-import 'package:kaptur_alpha_v1/sreen_constants.dart';
-import 'package:flutter/material.dart';
-import 'navigation_bar.dart';
-import 'CameraModule.dart';
-import 'color_calculation.dart';
-import 'package:provider/provider.dart';
-import 'generate_video_page.dart';
-import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'generate_video_page.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-import 'generate_video_page.dart';
+import 'package:kaptur_alpha_v1/sreen_constants.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import 'CameraModule.dart';
+import 'generate_video_page.dart';
+import 'navigation_bar.dart';
 
 Future<void> _requestPermissions() async {
   Map<Permission, PermissionStatus> statuses = await [
@@ -26,12 +16,14 @@ Future<void> _requestPermissions() async {
     Permission.microphone,
   ].request();
 
-  if (statuses[Permission.camera] != PermissionStatus.granted || statuses[Permission.microphone] != PermissionStatus.granted) {
+  if (statuses[Permission.camera] != PermissionStatus.granted ||
+      statuses[Permission.microphone] != PermissionStatus.granted) {
     showDialog(
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Permission Required'),
-          content: Text('Camera and microphone permissions are required to use this app'),
+          content: Text(
+              'Camera and microphone permissions are required to use this app'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -118,7 +110,16 @@ class _CombinedWidgetState extends State<CombinedWidget> {
                       return IconButton(
                         onPressed: () async {
                           final ImagePicker _picker = ImagePicker();
-                          final XFile? image = await Navigator.pushNamed<XFile?>(context, camera);
+                          await showDialog<XFile>(
+                              context: context,
+                              builder: (c) {
+                                return Dialog(child: CameraModule());
+                              });
+
+                          XFile? image = test;
+                          print(">>>> ${image?.path}");
+                          // final XFile? img = await _picker.pickImage(source: ImageSource.camera);
+                          // Navigator.pushNamed(context, camera);
                           if (image != null) {
                             setState(() {
                               capturedImages.add(File(image.path));
@@ -130,7 +131,8 @@ class _CombinedWidgetState extends State<CombinedWidget> {
                     }
 
                     final imageFile = capturedImages[index - 1];
-                    final isSelected = selectedImageUrls.contains(imageFile.path);
+                    final isSelected =
+                        selectedImageUrls.contains(imageFile.path);
 
                     return GestureDetector(
                       onTap: () {

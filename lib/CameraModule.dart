@@ -4,6 +4,7 @@
 
 import 'dart:async';
 import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -101,11 +102,10 @@ class _CameraHomeState extends State<CameraHome> with WidgetsBindingObserver, Ti
     currentTimerValue = _selectedTimerOption;
     isTimerActive = true;
 
-    Timer(Duration(seconds: _selectedTimerOption), () {
-      onTakePictureButtonPressed();
-      print("camera pop 1");
-
-      Navigator.pop<XFile?>(context, imageFile);
+    Timer(Duration(seconds: _selectedTimerOption), () async {
+      final XFile? image = await onTakePictureButtonPressed();
+      test = image;
+      Navigator.pop<XFile?>(context, image);
     });
   }
 
@@ -829,15 +829,19 @@ class _CameraHomeState extends State<CameraHome> with WidgetsBindingObserver, Ti
     }
   }
 
-  void onTakePictureButtonPressed() {
+  Future<XFile?> onTakePictureButtonPressed() async {
+    return await takePicture();
     takePicture().then((XFile? file) {
-      if (mounted) {
+      if (mounted || true) {
+        imageFile = file;
+        return;
         setState(() {
           imageFile = file;
           videoController?.dispose();
           videoController = null;
         });
         if (file != null) {
+          // Navigator.pop(context, file);
           showInSnackBar('Picture saved to ${file.path}');
         }
       }
@@ -1146,6 +1150,7 @@ class _CameraHomeState extends State<CameraHome> with WidgetsBindingObserver, Ti
 
     try {
       final XFile file = await cameraController.takePicture();
+      print(file.path);
       return file;
     } on CameraException catch (e) {
       _showCameraException(e);
@@ -1159,12 +1164,42 @@ class _CameraHomeState extends State<CameraHome> with WidgetsBindingObserver, Ti
   }
 }
 
-class CameraModule extends StatelessWidget {
+class CameraModule extends StatefulWidget {
   /// Default Constructor
   const CameraModule({super.key});
 
   @override
+  State<CameraModule> createState() => _CameraModuleState();
+}
+
+class _CameraModuleState extends State<CameraModule> {
+  @override
+  void initState() {
+    super.initState();
+    initCamera();
+  }
+
+  bool buildUI = false;
+  void initCamera() async {
+    try {
+      WidgetsFlutterBinding.ensureInitialized();
+      _cameras = await availableCameras();
+      setState(() {
+        buildUI = true;
+      });
+    } on CameraException catch (e) {
+      _logError(e.code, e.description);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (!buildUI)
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
     return const MaterialApp(
       home: CameraHome(),
     );
@@ -1181,5 +1216,6 @@ Future<void> main() async {
   } on CameraException catch (e) {
     _logError(e.code, e.description);
   }
-  runApp(const CameraModule());
 }
+
+XFile? test;
