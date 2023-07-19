@@ -103,6 +103,8 @@ class _CameraHomeState extends State<CameraHome> with WidgetsBindingObserver, Ti
 
     Timer(Duration(seconds: _selectedTimerOption), () {
       onTakePictureButtonPressed();
+      print("camera pop 1");
+
       Navigator.pop<XFile?>(context, imageFile);
     });
   }

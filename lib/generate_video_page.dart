@@ -11,13 +11,7 @@ import 'navigation_bar.dart';
 class GenerateVideoPage extends StatefulWidget {
   final List<String> selectedImageUrls;
 
-  const GenerateVideoPage(
-      {Key? key,
-      required this.selectedImageUrls,
-      required List<String> selectedImages,
-      required String videoPath,
-      required List<File> capturedImages})
-      : super(key: key);
+  const GenerateVideoPage({Key? key, required this.selectedImageUrls, required List<String> selectedImages, required String videoPath, required List<File> capturedImages}) : super(key: key);
 
   @override
   _GenerateVideoPageState createState() => _GenerateVideoPageState();
@@ -32,8 +26,7 @@ class _GenerateVideoPageState extends State<GenerateVideoPage> {
   void initState() {
     super.initState();
     // Initialize video player and chewie controller
-    _videoPlayerController =
-        VideoPlayerController.asset('assets/videos/video.mp4');
+    _videoPlayerController = VideoPlayerController.asset('assets/videos/video.mp4');
     // Replace 'video_url' with the actual URL or local path of your generated video file
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
@@ -82,8 +75,7 @@ class _GenerateVideoPageState extends State<GenerateVideoPage> {
                   Text(
                     "Generate Video.",
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                        fontSize: 60 / 360 * ScreenConstants.screenWidth),
+                    style: Theme.of(context).textTheme.displayLarge!.copyWith(fontSize: 60 / 360 * ScreenConstants.screenWidth),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -100,7 +92,11 @@ class _GenerateVideoPageState extends State<GenerateVideoPage> {
                         SizedBox(width: 8),
                         DropdownButton<int>(
                           value: selectedFramerate,
-                          items: [24, 30, 60].map((value) {
+                          items: [
+                            24,
+                            30,
+                            60
+                          ].map((value) {
                             return DropdownMenuItem<int>(
                               value: value,
                               child: Text(value.toString()),
@@ -114,8 +110,7 @@ class _GenerateVideoPageState extends State<GenerateVideoPage> {
                   Expanded(
                     child: GridView.builder(
                       padding: const EdgeInsets.all(8),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 8,
                         mainAxisSpacing: 8,
@@ -169,8 +164,9 @@ class _GenerateVideoPageState extends State<GenerateVideoPage> {
                 padding: const EdgeInsets.all(16),
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    Navigator.pop(
-                        context); // Navigate back to the previous page
+                    print("gen video pop 1");
+
+                    Navigator.pop(context); // Navigate back to the previous page
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(

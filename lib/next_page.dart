@@ -20,8 +20,7 @@ class _NextCreateState extends State<NextCreate> {
   TimeOfDay selectedTime = TimeOfDay.now();
   String selectedSound = 'Default';
   String selectedRepeatOption = ''; // Declare and initialize the variable
-  TimeOfDay selectedCustomTime =
-      TimeOfDay.now(); // Declare and initialize the variable
+  TimeOfDay selectedCustomTime = TimeOfDay.now(); // Declare and initialize the variable
 
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? pickedTime = await showTimePicker(
@@ -51,6 +50,7 @@ class _NextCreateState extends State<NextCreate> {
             return ListTile(
               title: Text(sound),
               onTap: () {
+                print("nextpage pop 1");
                 Navigator.pop(context, sound);
               },
             );
@@ -176,8 +176,7 @@ class _NextCreateState extends State<NextCreate> {
                               foregroundColor: MaterialStateProperty.all<Color>(
                                 appState.labelTextColor,
                               ),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
                                     8 / 360 * ScreenConstants.screenWidth,
@@ -210,8 +209,7 @@ class _NextCreateState extends State<NextCreate> {
                             foregroundColor: MaterialStateProperty.all<Color>(
                               appState.labelTextColor,
                             ),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
                                   8 / 360 * ScreenConstants.screenWidth,
@@ -312,6 +310,8 @@ class _NextCreateState extends State<NextCreate> {
                         ),
                       ),
                       onPressed: () {
+                        print("nextpage pop 2");
+
                         Navigator.pop(context);
                       },
                       child: const Row(
