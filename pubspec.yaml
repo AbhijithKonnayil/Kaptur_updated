@@ -103,6 +103,8 @@ flutter:
     - assets/icons/profile_cat.png
     - assets/icons/profile_cat_filled.png
     - assets/icons/pen.png
+    - assets/icons/prev_page.png
+    - assets/icons/next_page.png
     - assets/ShutterIcon.png
     - lib/emojiList.txt
     - packages/animated_emoji/lottie/ox.json

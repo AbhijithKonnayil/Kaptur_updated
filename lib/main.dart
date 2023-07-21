@@ -3,7 +3,6 @@ import 'package:kaptur_alpha_v1/next_page.dart';
 import 'package:kaptur_alpha_v1/project_home.dart';
 import 'package:kaptur_alpha_v1/your_project.dart';
 import 'package:provider/provider.dart';
-
 import 'CameraModule.dart';
 import 'color_calculation.dart';
 import 'create_project.dart';
@@ -13,16 +12,14 @@ import 'routes.dart';
 import 'settings.dart';
 import 'sreen_constants.dart';
 
-main(List<String> args) async {
+main(List<String> args) {
   WidgetsFlutterBinding.ensureInitialized();
 
   final appState = AppState();
   print("restarting the app");
-  await appState.loadColorsFromSharedPreferences();
-  runApp(Kaptur(appState: appState));
-  // appState.loadColorsFromSharedPreferences().then((_) {
-  //   runApp(Kaptur(appState: appState));
-  // });
+  appState.loadColorsFromSharedPreferences().then((_) {
+    runApp(Kaptur(appState: appState));
+  });
 }
 
 class Kaptur extends StatelessWidget {
@@ -32,19 +29,17 @@ class Kaptur extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("rebuilding the app");
     final Size screenSize = MediaQuery.of(context).size;
     ScreenConstants.screenWidth = screenSize.width;
     ScreenConstants.screenHeight = screenSize.height;
 
     return ChangeNotifierProvider.value(
-      key: key,
       value: appState,
       child: Consumer<AppState>(builder: (context, appState, _) {
         return MaterialApp(
           title: "Kaptur",
           theme: appState.theme,
-          home: CombinedWidget(),
+          home: HomeScreen(),
           routes: {
             home: (context) => HomeScreen(),
             settings: (context) => Settings(),

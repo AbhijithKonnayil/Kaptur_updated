@@ -8,21 +8,31 @@ import 'next_page.dart';
 import 'sreen_constants.dart';
 import 'sql_helper.dart';
 
-class CreateProject extends StatelessWidget {
+class CreateProject extends StatefulWidget {
   CreateProject({Key? key}) : super(key: key);
 
+  @override
+  State<CreateProject> createState() => _CreateProjectState();
+}
+
+class _CreateProjectState extends State<CreateProject> {
   int i = 0;
+
   FocusNode _projectNameFocusNode = FocusNode();
+
   int selectedEmojiIndex = 0;
+
   bool isLandscapeSelected = true;
+
   List<String> emojiList = [];
+
   final TextEditingController _projectNameController = TextEditingController();
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getEmojiList();
-  // }
+  @override
+  void initState() {
+    super.initState();
+    getEmojiList();
+  }
 
   Future<void> _saveProjectName(String projectName) async {
     await SQLHelper.instance.saveProjectName(projectName);
@@ -59,9 +69,9 @@ class CreateProject extends StatelessWidget {
           splashColor: appState.labelColor,
           customBorder: const CircleBorder(),
           onTap: () {
-            // setState(() {
-            //   selectedEmojiIndex = index;
-            // });
+            setState(() {
+              selectedEmojiIndex = index;
+            });
           },
           child: Align(
               alignment: Alignment.center,
@@ -138,10 +148,28 @@ class CreateProject extends StatelessWidget {
                   textAlign: TextAlign.left,
                 ),
               ),
-              TextFormField(
-                focusNode: _projectNameFocusNode,
-                controller: _projectNameController,
-                // Rest of your TextFormField configuration
+              Container(
+                margin: EdgeInsets.symmetric(
+                  horizontal: 25 / 360 * ScreenConstants.screenWidth,
+                  vertical: 10 / 360 * ScreenConstants.screenWidth,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.orange[100],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextFormField(
+                  textAlign: TextAlign.center,
+                  focusNode: _projectNameFocusNode,
+                  controller: _projectNameController,
+                  decoration: InputDecoration(
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 10 / 360 * ScreenConstants.screenWidth,
+                      )),
+
+                  // Rest of your TextFormField configuration
+                ),
               ),
               Container(
                 margin: EdgeInsets.only(
@@ -170,7 +198,13 @@ class CreateProject extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: null,
                             borderRadius: BorderRadius.circular(10 / 360 * ScreenConstants.screenWidth),
-                            border: isLandscapeSelected ? Border.all(color: appState.accentColor, width: 4, strokeAlign: BorderSide.strokeAlignCenter) : null,
+                            border: isLandscapeSelected
+                                ? Border.all(
+                                    color: appState.accentColor,
+                                    width: 4,
+                                    strokeAlign: BorderSide.strokeAlignCenter,
+                                  )
+                                : null,
                           ),
                           child: Material(
                               shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -178,14 +212,19 @@ class CreateProject extends StatelessWidget {
                               elevation: 5 / 360 * ScreenConstants.screenWidth,
                               child: InkWell(
                                   splashColor: appState.labelColor,
-                                  customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                                  customBorder: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  ),
                                   onTap: () {
-                                    // setState(() {
-                                    //   isLandscapeSelected = true;
-                                    // });
+                                    setState(() {
+                                      isLandscapeSelected = true;
+                                    });
                                   }))),
                       Container(
-                        margin: EdgeInsets.only(top: 10 / 360 * ScreenConstants.screenWidth, left: 20 / 360 * ScreenConstants.screenWidth),
+                        margin: EdgeInsets.only(
+                          top: 10 / 360 * ScreenConstants.screenWidth,
+                          left: 20 / 360 * ScreenConstants.screenWidth,
+                        ),
                         alignment: Alignment.center,
                         child: Text(
                           "Landscape",
@@ -218,9 +257,9 @@ class CreateProject extends StatelessWidget {
                                   splashColor: appState.labelColor,
                                   customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                                   onTap: () {
-                                    // setState(() {
-                                    //   isLandscapeSelected = false;
-                                    // });
+                                    setState(() {
+                                      isLandscapeSelected = false;
+                                    });
                                   }))),
                       Container(
                         margin: EdgeInsets.only(top: 10 / 360 * ScreenConstants.screenWidth, left: 25 / 360 * ScreenConstants.screenWidth),
@@ -235,15 +274,35 @@ class CreateProject extends StatelessWidget {
                   )
                 ],
               ),
-              Container(
-                alignment: Alignment.centerRight,
-                margin: EdgeInsets.only(right: 24 / 360 * ScreenConstants.screenWidth, top: 10 / 360 * ScreenConstants.screenWidth),
-                child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pushNamed(context, nextPage);
-                    },
-                    icon: Icon(Icons.arrow_right),
-                    label: Text("Next")),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 40 / 360 * ScreenConstants.screenWidth,
+                  width: 110 / 360 * ScreenConstants.screenWidth,
+                  margin: EdgeInsets.only(right: 24 / 360 * ScreenConstants.screenWidth, top: 10 / 360 * ScreenConstants.screenWidth),
+                  child: ElevatedButton.icon(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(appState.accentColor),
+                        foregroundColor: MaterialStatePropertyAll(appState.labelTextColor),
+                        shape: MaterialStatePropertyAll(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, nextPage);
+                      },
+                      icon: Image.asset(
+                        "assets/icons/next_page.png",
+                        width: 24 / 360 * ScreenConstants.screenWidth,
+                        height: 24 / 360 * ScreenConstants.screenWidth,
+                        color: appState.labelTextColor,
+                        fit: BoxFit.contain,
+                      ),
+                      label: Text("Next")),
+                ),
               )
             ],
           )

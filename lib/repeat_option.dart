@@ -4,15 +4,13 @@ import 'package:kaptur_alpha_v1/sreen_constants.dart';
 import 'color_calculation.dart';
 import 'package:provider/provider.dart';
 
-const List<String> options = <String>['Day', 'Week'];
+const List<String> options = <String>[
+  'Day',
+  'Week'
+];
 
 class RepeatButtons extends StatefulWidget {
-  const RepeatButtons(
-      {super.key,
-      required Null Function(TimeOfDay value) onCustomTimeChanged,
-      required String selectedRepeatOption,
-      required TimeOfDay selectedCustomTime,
-      required Null Function(String value) onRepeatOptionChanged});
+  const RepeatButtons({super.key, required Null Function(TimeOfDay value) onCustomTimeChanged, required String selectedRepeatOption, required TimeOfDay selectedCustomTime, required Null Function(String value) onRepeatOptionChanged});
 
   @override
   State<RepeatButtons> createState() => _RepeatButtonsState();
@@ -35,11 +33,12 @@ class _RepeatButtonsState extends State<RepeatButtons> {
           spacing: 15.0 / 360 * ScreenConstants.screenWidth,
           children: [
             Container(
-                margin: EdgeInsets.only(
-                    left: 24 / 360 * ScreenConstants.screenWidth),
-                child: Text("Repeat every",
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context).textTheme.titleLarge)),
+                margin: EdgeInsets.only(left: 24 / 360 * ScreenConstants.screenWidth),
+                child: Text(
+                  "Repeat every",
+                  textAlign: TextAlign.start,
+                  style: Theme.of(context).textTheme.titleMedium,
+                )),
             SizedBox(
               height: 40 / 360 * ScreenConstants.screenWidth,
               child: FractionallySizedBox(
@@ -47,16 +46,11 @@ class _RepeatButtonsState extends State<RepeatButtons> {
                 // heightFactor: 0.9,
                 child: FilledButton(
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStatePropertyAll(appState.accentColor),
-                      overlayColor:
-                          MaterialStatePropertyAll(appState.accentColor),
-                      foregroundColor:
-                          MaterialStatePropertyAll(appState.labelTextColor),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(
-                            8 / 360 * ScreenConstants.screenWidth)),
+                      backgroundColor: MaterialStatePropertyAll(appState.accentColor),
+                      overlayColor: MaterialStatePropertyAll(appState.accentColor),
+                      foregroundColor: MaterialStatePropertyAll(appState.labelTextColor),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8 / 360 * ScreenConstants.screenWidth)),
                         // side: BorderSide(color: Colors.red)
                       ))),
                   onPressed: () {},
@@ -72,11 +66,9 @@ class _RepeatButtonsState extends State<RepeatButtons> {
                 child: FractionallySizedBox(
                     widthFactor: 0.2 / 360 * ScreenConstants.screenWidth,
                     child: Container(
-                      padding:
-                          EdgeInsets.all(6 / 360 * ScreenConstants.screenWidth),
+                      padding: EdgeInsets.all(6 / 360 * ScreenConstants.screenWidth),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(
-                            8 / 360 * ScreenConstants.screenWidth)),
+                        borderRadius: BorderRadius.all(Radius.circular(8 / 360 * ScreenConstants.screenWidth)),
                         color: appState.accentColor,
                       ),
                       child: DropdownButton<String>(
@@ -93,8 +85,7 @@ class _RepeatButtonsState extends State<RepeatButtons> {
                             optionsDropdownValue = value!;
                           });
                         },
-                        items: options
-                            .map<DropdownMenuItem<String>>((String value) {
+                        items: options.map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
